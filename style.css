@@ -21,7 +21,7 @@ header h1 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
-.gameboard div {
+.field {
   width: 200px;
   height: 200px;
   text-align: center;
