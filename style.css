@@ -1,0 +1,28 @@
+body {
+  margin: 0px;
+}
+header {
+  text-align: center;
+  height: minmax(fit-content, 150px);
+  background-color: aqua;
+  border: 1px solid black;
+  font-size: 40px;
+}
+header h1 {
+  margin: 0;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.gameboard div {
+  width: 200px;
+  height: 200px;
+  text-align: center;
+}
