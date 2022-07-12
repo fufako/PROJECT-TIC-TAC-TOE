@@ -47,6 +47,8 @@ const gameBoard = (() => {
 const displayController = (() => {
   const fields = document.querySelectorAll(".field")
   const resetBtn = document.getElementById("reset")
+  const message = document.getElementById("message")
+  message.textContent = "Player X's turn"
   fields.forEach((field) =>
     field.addEventListener("click", (e) => {
       if (gamePlay.getIsOver() || e.target.textContent !== "") {
@@ -60,6 +62,7 @@ const displayController = (() => {
     gameBoard.resetBoard()
     gamePlay.reset()
     resetDisplay()
+    setMessage("Player X's turn")
   })
 
   const resetDisplay = () => {
@@ -67,6 +70,11 @@ const displayController = (() => {
       field.textContent = ""
     })
   }
+
+  const setMessage = (messageContent) => {
+    message.textContent = messageContent
+  }
+  return { setMessage }
 })()
 
 const gamePlay = (() => {
@@ -78,8 +86,12 @@ const gamePlay = (() => {
   const playRound = (field) => {
     gameBoard.setBoardField(field, getCurrentPlayer())
     move += 1
+    displayController.setMessage("Player " + getCurrentPlayer() + "'s turn")
     if (move > 9) {
       isOver = true
+    }
+    if (move === 10) {
+      displayController.setMessage("Draw")
     }
   }
   const getCurrentPlayer = () => {
