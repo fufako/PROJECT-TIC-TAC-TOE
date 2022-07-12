@@ -1,12 +1,12 @@
-const makeBoard = (() => {
+const setupBoard = (() => {
   const board = document.getElementById("gameboard")
+
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       let gridItem = document.createElement("div")
       gridItem.dataset.row = i
       gridItem.dataset.column = j
       gridItem.className = "field"
-      gridItem.innerHTML = "row: " + i + ", column: " + j
       board.appendChild(gridItem)
     }
   }
@@ -49,32 +49,49 @@ const displayController = (() => {
   const resetBtn = document.getElementById("reset")
   fields.forEach((field) =>
     field.addEventListener("click", (e) => {
-      if (gameStatus.isOver() || e.target.textContent === "") {
+      if (gamePlay.getIsOver() || e.target.textContent !== "") {
         return
+      } else {
+        gamePlay.playRound(field)
       }
-      gameStatus.playRound(field)
     })
   )
   resetBtn.addEventListener("click", (e) => {
     gameBoard.resetBoard()
+    gamePlay.reset()
+    resetDisplay()
   })
+
+  const resetDisplay = () => {
+    fields.forEach((field) => {
+      field.textContent = ""
+    })
+  }
 })()
 
-const gameStatus = (() => {
+const gamePlay = (() => {
   const playerX = Player("X")
   const playerO = Player("O")
+  let isOver = false
   let move = 1
 
   const playRound = (field) => {
     gameBoard.setBoardField(field, getCurrentPlayer())
     move += 1
+    if (move > 9) {
+      isOver = true
+    }
   }
   const getCurrentPlayer = () => {
     return move % 2 === 1 ? playerX.getSign() : playerO.getSign()
   }
-  const isOver = () => {
-    return false
+  const getIsOver = () => {
+    return isOver
+  }
+  const reset = () => {
+    move = 1
+    isOver = false
   }
 
-  return { isOver, playRound }
+  return { getIsOver, playRound, reset }
 })()
