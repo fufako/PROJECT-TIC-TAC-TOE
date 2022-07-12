@@ -25,4 +25,7 @@ header h1 {
   width: 200px;
   height: 200px;
   text-align: center;
+  background-color: blueviolet;
+  border: 1px solid black;
+  font-size: 200px;
 }
