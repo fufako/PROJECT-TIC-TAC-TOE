@@ -1,14 +1,11 @@
 const setupBoard = (() => {
   const board = document.getElementById("gameboard")
 
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      let gridItem = document.createElement("div")
-      gridItem.dataset.row = i
-      gridItem.dataset.column = j
-      gridItem.className = "field"
-      board.appendChild(gridItem)
-    }
+  for (let i = 0; i < 9; i++) {
+    let gridItem = document.createElement("div")
+    gridItem.dataset.index = i
+    gridItem.className = "field"
+    board.appendChild(gridItem)
   }
 })()
 
@@ -22,26 +19,24 @@ const Player = (sign) => {
 }
 
 const gameBoard = (() => {
-  const board = [
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-  ]
+  const board = ["", "", "", "", "", "", "", "", ""]
 
   const setBoardField = (field, sign) => {
-    board[field.dataset.row][field.dataset.column] = sign
+    board[field.dataset.index] = sign
     field.textContent = sign
     console.log(board)
   }
   const resetBoard = () => {
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        board[i][j] = ""
-      }
+    for (let i = 0; i < 9; i++) {
+      board[i] = ""
     }
   }
 
-  return { setBoardField, resetBoard }
+  const getBoard = () => {
+    return board
+  }
+
+  return { setBoardField, resetBoard, getBoard, board }
 })()
 
 const displayController = (() => {
@@ -54,6 +49,7 @@ const displayController = (() => {
       if (gamePlay.getIsOver() || e.target.textContent !== "") {
         return
       } else {
+        console.log("playround po tym")
         gamePlay.playRound(field)
       }
     })
@@ -84,6 +80,11 @@ const gamePlay = (() => {
   let move = 1
 
   const playRound = (field) => {
+    if (checkWinner(gameBoard.getBoard(), getCurrentPlayer()) === true) {
+      isOver = true
+      console.log("Player" + getCurrentPlayer() + " won")
+      return
+    }
     gameBoard.setBoardField(field, getCurrentPlayer())
     move += 1
     displayController.setMessage("Player " + getCurrentPlayer() + "'s turn")
@@ -97,12 +98,27 @@ const gamePlay = (() => {
   const getCurrentPlayer = () => {
     return move % 2 === 1 ? playerX.getSign() : playerO.getSign()
   }
+
   const getIsOver = () => {
     return isOver
   }
   const reset = () => {
     move = 1
     isOver = false
+  }
+  const checkWinner = (board, sign) => {
+    if (
+      (board[0] === sign && board[1] === sign && board[2] === sign) ||
+      (board[3] === sign && board[4] === sign && board[5] === sign) ||
+      (board[6] === sign && board[7] === sign && board[8] === sign) ||
+      (board[0] === sign && board[3] === sign && board[6] === sign) ||
+      (board[1] === sign && board[4] === sign && board[7] === sign) ||
+      (board[2] === sign && board[5] === sign && board[8] === sign) ||
+      (board[0] === sign && board[4] === sign && board[8] === sign) ||
+      (board[2] === sign && board[4] === sign && board[6] === sign)
+    )
+      return true
+    else return false
   }
 
   return { getIsOver, playRound, reset }
