@@ -80,12 +80,12 @@ const gamePlay = (() => {
   let move = 1
 
   const playRound = (field) => {
-    if (checkWinner(gameBoard.getBoard(), getCurrentPlayer()) === true) {
+    gameBoard.setBoardField(field, getCurrentPlayer())
+    if (isWinner(gameBoard.getBoard(), getCurrentPlayer())) {
       isOver = true
       console.log("Player" + getCurrentPlayer() + " won")
       return
     }
-    gameBoard.setBoardField(field, getCurrentPlayer())
     move += 1
     displayController.setMessage("Player " + getCurrentPlayer() + "'s turn")
     if (move > 9) {
@@ -95,6 +95,7 @@ const gamePlay = (() => {
       displayController.setMessage("Draw")
     }
   }
+
   const getCurrentPlayer = () => {
     return move % 2 === 1 ? playerX.getSign() : playerO.getSign()
   }
@@ -102,24 +103,21 @@ const gamePlay = (() => {
   const getIsOver = () => {
     return isOver
   }
+
   const reset = () => {
     move = 1
     isOver = false
   }
-  const checkWinner = (board, sign) => {
-    if (
-      (board[0] === sign && board[1] === sign && board[2] === sign) ||
-      (board[3] === sign && board[4] === sign && board[5] === sign) ||
-      (board[6] === sign && board[7] === sign && board[8] === sign) ||
-      (board[0] === sign && board[3] === sign && board[6] === sign) ||
-      (board[1] === sign && board[4] === sign && board[7] === sign) ||
-      (board[2] === sign && board[5] === sign && board[8] === sign) ||
-      (board[0] === sign && board[4] === sign && board[8] === sign) ||
-      (board[2] === sign && board[4] === sign && board[6] === sign)
-    )
-      return true
-    else return false
-  }
+
+  const isWinner = (board, sign) =>
+    (board[0] === sign && board[1] === sign && board[2] === sign) ||
+    (board[3] === sign && board[4] === sign && board[5] === sign) ||
+    (board[6] === sign && board[7] === sign && board[8] === sign) ||
+    (board[0] === sign && board[3] === sign && board[6] === sign) ||
+    (board[1] === sign && board[4] === sign && board[7] === sign) ||
+    (board[2] === sign && board[5] === sign && board[8] === sign) ||
+    (board[0] === sign && board[4] === sign && board[8] === sign) ||
+    (board[2] === sign && board[4] === sign && board[6] === sign)
 
   return { getIsOver, playRound, reset }
 })()
