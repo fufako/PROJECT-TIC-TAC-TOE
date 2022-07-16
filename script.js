@@ -24,7 +24,6 @@ const gameBoard = (() => {
   const setBoardField = (field, sign) => {
     board[field.dataset.index] = sign
     field.textContent = sign
-    console.log(board)
   }
   const resetBoard = () => {
     for (let i = 0; i < 9; i++) {
@@ -49,7 +48,6 @@ const displayController = (() => {
       if (gamePlay.getIsOver() || e.target.textContent !== "") {
         return
       } else {
-        console.log("playround po tym")
         gamePlay.playRound(field)
       }
     })
@@ -83,7 +81,7 @@ const gamePlay = (() => {
     gameBoard.setBoardField(field, getCurrentPlayer())
     if (isWinner(gameBoard.getBoard(), getCurrentPlayer())) {
       isOver = true
-      console.log("Player" + getCurrentPlayer() + " won")
+      displayController.setMessage("Player " + getCurrentPlayer() + "'s WON!")
       return
     }
     move += 1
